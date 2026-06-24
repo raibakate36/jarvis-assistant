@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Jarvis Chat</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+    <h1>Jarvis Chat</h1>
+
+    <p>Hello Raiba! Ask me anything.</p>
+
+    <div id="chatArea"></div>
+
+    <input id="messageBox" type="text" placeholder="Ask Jarvis anything...">
+
+    <button id="sendBtn">Send</button>
+
+    <script>
+        document.getElementById("sendBtn").onclick = async function() {
+
+            let message = document.getElementById("messageBox").value;
+
+            if (message.trim() == "") {
+                document.getElementById("messageBox").value = "";
+                return;
+            }
+
+            let response = await fetch("/get_response", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    message: message
+                })
+            });
+
+            let data = await response.json();
+
+            document.getElementById("chatArea").innerHTML =
+                document.getElementById("chatArea").innerHTML +
+                "<div class='user-message'>You: " + message + "</div>" +
+                "<div class='jarvis-message'>Jarvis: " + data.reply + "</div>";
+
+            document.getElementById("messageBox").value = "";
+        };
+
+        document.getElementById("messageBox").addEventListener("keydown", function(event) {
+            if (event.key === "Enter") {
+                document.getElementById("sendBtn").click();
+            }
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,60 @@
+body {
+    text-align: center;
+
+    background-image: url("/static/jarvis.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+
+    color: white;
+    padding-top: 100px;
+}
+
+h1 {
+    color: white;
+    text-shadow: 2px 2px 5px black;
+}
+h1:hover {
+    color: red;
+}
+
+button {
+    background-color: black;
+    color: white;
+
+    padding: 12px 24px;
+
+    border: 2px solid cyan;
+
+    font-size: 18px;
+
+    border-radius: 10px;
+}
+
+button:hover{
+    background-color: cyan;
+    color: black;
+}
+.user-message {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px;
+    margin: 5px;
+    border-radius: 10px;
+    max-width: 60%;
+    display: block;
+    margin-left: auto;
+    text-align: right;
+}
+
+.jarvis-message {
+    background-color: #333;
+    color: white;
+    padding: 10px;
+    margin: 5px;
+    border-radius: 10px;
+    max-width: 60%;
+    display: block;
+    margin-right: auto;
+    text-align: left;
+}
