@@ -17,41 +17,60 @@
     <button id="sendBtn">Send</button>
 
     <script>
-        document.getElementById("sendBtn").onclick = async function() {
+    const chatArea = document.getElementById("chatArea");
+    document.getElementById("sendBtn").onclick = async function () {
 
-            let message = document.getElementById("messageBox").value;
+    let message = document.getElementById("messageBox").value;
 
-            if (message.trim() == "") {
-                document.getElementById("messageBox").value = "";
-                return;
-            }
+    if (message.trim() === "") return;
 
-            let response = await fetch("/get_response", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    message: message
-                })
-            });
+    // Show user's message immediately
+   chatArea.innerHTML +=
+        "<div class='user-message'>You: " + message + "</div>";
 
-            let data = await response.json();
+    // Clear the textbox immediately
+    document.getElementById("messageBox").value = "";
 
-            document.getElementById("chatArea").innerHTML =
-                document.getElementById("chatArea").innerHTML +
-                "<div class='user-message'>You: " + message + "</div>" +
-                "<div class='jarvis-message'>Jarvis: " + data.reply + "</div>";
-
-            document.getElementById("messageBox").value = "";
-        };
-
-        document.getElementById("messageBox").addEventListener("keydown", function(event) {
-            if (event.key === "Enter") {
-                document.getElementById("sendBtn").click();
-            }
+    try {
+        console.time("Total")
+        let response = await fetch("/get_response", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                message: message
+            })
         });
-    </script>
+        console.timeLog("Total", "Response received");
+        let data = await response.json();
+
+
+        console.timeEnd("Total");
+
+        // Show Jarvis's reply when it arrives
+        chatArea.innerHTML +=
+            "<div class='jarvis-message'>Jarvis: " + data.reply + "</div>";
+
+        // Automatically scroll to the latest message
+        chatArea.scrollTop =
+            chatArea.scrollHeight;
+
+    } catch (error) {
+
+        chatArea.innerHTML +=
+            "<div class='jarvis-message'>Jarvis: Something went wrong.</div>";
+
+        console.error(error);
+    }
+};
+
+document.getElementById("messageBox").addEventListener("keydown", function (event) {
+    if (event.key === "Enter") {
+        document.getElementById("sendBtn").click();
+    }
+});
+</script>
 
 </body>
 </html>

@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, jsonify
 from chatbot import get_jarvis_reply
+import time
 
 app = Flask(__name__)
 
@@ -16,7 +17,13 @@ def get_response():
     data = request.get_json()
     message = data["message"]
 
+    start = time.perf_counter()
+
     reply = get_jarvis_reply(message)
+
+    print("Jarvis processing time:", time.perf_counter() - start)
+
+    print("Jarvis Reply:", reply)
 
     return jsonify({"reply": reply})
 if __name__ == "__main__":
